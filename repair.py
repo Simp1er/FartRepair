@@ -41,9 +41,6 @@ def read_one_line(line):
 		return _name,_method_idx,_offset,_code_item_len,_ins
 	else:
 		return '',-1,-1,-1,''	
-	#print(dex.base64_decode())
-	#data = json.loads(line,encoding = 'utf-8')
-	#print(data)
 
 def init():
 	global filename
@@ -77,42 +74,8 @@ def init():
 	print('ins file:', insfilename)
 	print('repair method name:', method_name)
 	
-def sha1_digest(data):
-	sha1 = hashlib.sha1()
-	sha1.update(data)
-	print(len(sha1.digest()))
-	return sha1.digest()
 
-def adler32_checksum(data):
-	adler32 = zlib.adler32(data)
-	return adler32	 	
 
-def fix_sha1(dex_file_data):
-	if not dex_file_data:
-		print('data is null')
-		exit(-2)
-	sha1 = sha1_digest(dex_file_data[32:])
-	return dex_file_data[0:12] + sha1 + dex_file_data[32:]	
-	
-def fix_adler32_checksum(dex_file_data):
-	if not dex_file_data:
-		print('data is null')
-		exit(-2)
-	adler32 = adler32_checksum(dex_file_data[12:])
-	print(hex(adler32))
-	return dex_file_data[0:8] + struct.pack("<I", adler32) + dex_file_data[12:]	
-		
-def fix_checksum(dex_file):
-	dex_file.seek(0,0)
-	dex_file_data = dex_file.read()
-	if not dex_file_data:
-		print('fix checksum error!')
-		exit(-2)
-	dex_file_data = fix_sha1(dex_file_data)
-	dex_file_data = fix_adler32_checksum(dex_file_data)
-	dex_file.seek(0,0)
-	dex_file.write(dex_file_data)
-	print('fix checksum success!')
 	
 		
 	
@@ -169,10 +132,5 @@ def main():
 		
 if __name__ == '__main__':
 	main()
-	#sha1_digest(dex_file.read())
-	#_ins_file = open('/Users/simp1er/Desktop/test.txt',encoding="utf-8")
-	#dex_file = open('/Users/simp1er/Desktop/1.txt','rb+')
-	
-	
-	#read_one_line(fd)		
+		
 
